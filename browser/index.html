@@ -12,26 +12,28 @@
     <script src="/js/player/player.factory.js" defer></script>
     <script src="/js/album/stats.factory.js" defer></script>
     <script src="/js/album/album.factory.js" defer></script>
+    <script src="/js/sidebar/sidebar.factory.js" defer></script>
+    <script src="/js/sidebar/sidebar.controller.js" defer></script>
   </head>
   <body ng-app="juke">
     <div id="main" class="container-fluid">
 
       <div class="col-xs-2">
-        <sidebar>
+        <sidebar ng-controller="SidebarCtrl">
           <img src="juke.svg" class="logo">
           <section>
             <h4 class="menu-item active">
-              <a href="#">ALBUMS</a>
+              <a href="#" ng-click="viewAlbums()">ALBUMS</a>
             </h4>
           </section>
         </sidebar>
       </div>
 
       <div class="col-xs-10">
-        <div class="album" ng-controller="AlbumCtrl" ng-show="true">
+        <div class="album" ng-controller="AlbumCtrl" ng-show="!showAlbum()">
           <p>
-            <h3>{{ album.name }},  Duration: {{ album.duration }} minutes</h3>
-            <img ng-src="{{ album.imageUrl }}" class="img-thumbnail">
+            <h3>{{ album().name }},  Duration: {{ album().duration }} minutes</h3>
+            <img ng-src="{{ album().imageUrl }}" class="img-thumbnail">
           </p>
           <table class='table'>
             <thead>
@@ -43,7 +45,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="song in album.songs" ng-class="{active: song === PlayerFactory.getCurrentSong()}">
+              <tr ng-repeat="song in album().songs" ng-class="{active: song === PlayerFactory.getCurrentSong()}">
                 <td>
                   <button class="btn btn-default btn-xs" ng-click="toggle(song)">
                     <span class="glyphicon" ng-class="{'glyphicon-pause': PlayerFactory.isPlaying() && song === PlayerFactory.getCurrentSong(), 'glyphicon-play': song !== PlayerFactory.getCurrentSong() || !PlayerFactory.isPlaying()}"></span>
@@ -56,11 +58,11 @@
             </tbody>
           </table>
         </div>
-        <div ng-show="true" ng-controller="albums">
+        <div ng-controller="albums" ng-show="showAlbums()" >
           <h3>Albums</h3>
           <div class="row">
             <div class="col-xs-4" ng-repeat="album in albums">
-              <a class="thumbnail" href="#">
+              <a class="thumbnail" href="#" ng-click="getThisAlbum( album )">
                 <img ng-src="{{album.imageUrl}}">
                 <div class="caption">
                   <h5>

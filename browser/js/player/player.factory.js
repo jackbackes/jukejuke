@@ -17,9 +17,6 @@ juke.factory('PlayerFactory', function($rootScope){
       return isPlaying;
     },
     start: function( song, songList ){
-      // if ( song.id === PlayerFactory.getCurrentSong().id ){
-      //   this.resume();
-      // } else {
         if( !!songList && !song.albumIndex ) addIndex( songList );
         PlayerFactory.pause();
         if(songList) currentSongList = songList;
